@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+ --orange:#FF8C00;--orange-600:#F57C00;--gold:#FFD700;--green:#2ECC71;--green-600:#27AE60;--pink:#FF4081;
+ --navy-900:#0A2E63;--navy-800:#0D47A1;--blue-700:#1565C0;--blue-600:#1976D2;--blue-500:#1E88E5;--blue-400:#42A5F5;--blue-300:#64B5F6;--blue-100:#BBDEFB;--blue-50:#E8F2FE;
+ --white:#fff;--ink:#11253F;--ink-soft:#41556E;--ink-faint:#7B8AA0;--line:#E2E9F2;--surface:#F4F8FD;--surface-2:#EAF2FB;
+ --grad-hero:linear-gradient(135deg,#1565C0 0%,#1E88E5 52%,#64B5F6 100%);
+ --grad-hero-deep:linear-gradient(135deg,#0A2E63 0%,#1565C0 55%,#1E88E5 100%);
+ --grad-product:linear-gradient(150deg,#0D47A1 0%,#1565C0 100%);
+ --grad-cta:linear-gradient(135deg,#FF9D2E 0%,#FF8C00 100%);
+ --grad-gold:linear-gradient(135deg,#FFE45C 0%,#FFD700 100%);
+ --sh-sm:0 2px 8px rgba(13,71,161,.10);--sh-md:0 10px 24px rgba(13,71,161,.16);--sh-lg:0 18px 45px rgba(13,71,161,.20);--sh-cta:0 12px 26px rgba(255,140,0,.42);--sh-gold:0 8px 22px rgba(255,200,0,.45);
+ --r-md:16px;--r-lg:22px;--r-pill:999px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,sans-serif;background:var(--surface);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:rgba(255,140,0,.24)}
+@keyframes mktRise{from{opacity:.35;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes mktFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+@keyframes mktBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes mktBob2{0%,100%{transform:translateY(0)}50%{transform:translateY(11px)}}
+@keyframes mktBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(36px,-26px) scale(1.12)}66%{transform:translate(-26px,22px) scale(.92)}}
+@keyframes mktPulse{0%,100%{box-shadow:0 12px 26px rgba(255,140,0,.42)}50%{box-shadow:0 14px 42px rgba(255,140,0,.68)}}
+@keyframes mktModalIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+@keyframes mktToastIn{from{opacity:0;transform:translate(-50%,18px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (max-width:880px){[data-desktop-nav]{display:none!important}[data-hamburger]{display:inline-flex!important}}
+@media (min-width:881px){[data-mobile-menu]{display:none!important}[data-floating-cta]{display:none!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden">
+
+<!-- ================= NAV ================= -->
+<header style="position:sticky;top:0;z-index:60;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);box-shadow:var(--sh-sm)">
+  <div style="max-width:1200px;margin:0 auto;padding:11px 24px;display:flex;align-items:center;gap:24px">
+    <a onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:center;flex:none">
+      <img src="assets/logo/mkt-logo-horizontal.png" alt="MKT Software — Phần mềm Marketing AI đa kênh" style="height:38px;display:block" />
+    </a>
+    <nav data-desktop-nav style="display:flex;gap:4px;margin-left:14px">
+      <sc-for list="{{ navLinks }}" as="lnk" hint-placeholder-count="4">
+        <a onClick="{{ lnk.onClick }}" style="cursor:pointer;text-decoration:none;font-weight:700;font-size:14.5px;padding:8px 14px;border-radius:var(--r-pill);transition:color .15s,background .15s;color:{{ lnk.color }};background:{{ lnk.bg }}" style-hover="background:var(--surface)">{{ lnk.label }}</a>
+      </sc-for>
+    </nav>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
+      <a data-desktop-nav style="cursor:pointer;text-decoration:none;color:var(--blue-700);font-weight:700;font-size:14px">Đăng Ký Ngay</a>
+      <button onClick="{{ openForm }}" style="border:0;cursor:pointer;font-family:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:13px;color:#fff;background:var(--grad-cta);box-shadow:var(--sh-cta);border-radius:var(--r-pill);padding:11px 20px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .2s" style-hover="transform:translateY(-2px)" style-active="transform:scale(.96)">Nhận tư vấn miễn phí</button>
+      <button data-hamburger onClick="{{ toggleMenu }}" style="display:none;border:0;cursor:pointer;background:var(--surface);width:42px;height:42px;border-radius:12px;align-items:center;justify-content:center;color:var(--ink)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-mobile-menu style="border-top:1px solid var(--line);background:#fff;padding:12px 24px 20px;display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{ navLinks }}" as="lnk" hint-placeholder-count="4">
+        <a onClick="{{ lnk.onClick }}" style="cursor:pointer;text-decoration:none;font-weight:700;font-size:16px;padding:13px 12px;border-radius:12px;color:{{ lnk.color }}">{{ lnk.label }}</a>
+      </sc-for>
+      <button onClick="{{ openForm }}" style="margin-top:8px;border:0;cursor:pointer;font-family:inherit;font-weight:800;text-transform:uppercase;font-size:14px;color:#fff;background:var(--grad-cta);box-shadow:var(--sh-cta);border-radius:var(--r-pill);padding:15px;width:100%">Nhận tư vấn miễn phí</button>
+    </div>
+  </sc-if>
+</header>
+
+<main style="flex:1">
+
+<!-- ============================================================ HOME ============================================================ -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+
+<!-- HERO -->
+<section style="position:relative;background:var(--grad-hero-deep);overflow:hidden">
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 55%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;opacity:.16;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:28px 28px"></div>
+  <div style="position:absolute;top:-120px;left:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(100,181,246,.6),transparent 70%);filter:blur(20px);animation:mktBlob 16s ease-in-out infinite;pointer-events:none"></div>
+  <div style="position:absolute;bottom:-140px;right:-60px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(255,140,0,.34),transparent 70%);filter:blur(22px);animation:mktBlob 19s ease-in-out infinite reverse;pointer-events:none"></div>
+
+  <div style="position:relative;max-width:1200px;margin:0 auto;padding:clamp(48px,7vw,84px) 24px clamp(96px,9vw,128px);display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:48px;align-items:center">
+    <div data-reveal style="animation:mktRise .7s cubic-bezier(.2,.7,.3,1) both">
+      <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;font-weight:700;font-size:13px;padding:7px 15px;border-radius:var(--r-pill);backdrop-filter:blur(4px)">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(46,204,113,.28)"></span>
+        100.000+ doanh nghiệp đã thành công cùng MKT Software
+      </span>
+      <h1 style="margin:18px 0 18px;font-weight:900;font-size:clamp(23px,3.4vw,40px);line-height:1.24;letter-spacing:-.01em;text-transform:uppercase;color:#fff;text-wrap:balance">
+        Hàng nghìn người đã bứt phá ở đây<br><span style="color:var(--orange);white-space:nowrap">và bạn kiểm chứng được</span>
+      </h1>
+      <p style="margin:0 0 24px;font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:rgba(255,255,255,.86);font-weight:500;max-width:520px">Câu chuyện thật, số liệu thật, gương mặt thật từ khách hàng dùng giải pháp của MKT Software.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:30px">
+        <button onClick="{{ goList }}" style="border:0;cursor:pointer;font-family:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:15px;color:#fff;background:var(--grad-cta);border-radius:var(--r-pill);padding:16px 30px;display:inline-flex;align-items:center;gap:10px;animation:mktPulse 2.8s ease-in-out infinite;transition:transform .15s" style-hover="transform:translateY(-2px)" style-active="transform:scale(.96)">
+          Xem câu chuyện thành công
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <button onClick="{{ goVideo }}" style="border:1px solid rgba(255,255,255,.42);cursor:pointer;font-family:inherit;font-weight:700;font-size:15px;color:#fff;background:rgba(255,255,255,.14);backdrop-filter:blur(4px);border-radius:var(--r-pill);padding:16px 26px;display:inline-flex;align-items:center;gap:10px;transition:transform .15s,background .2s" style-hover="background:rgba(255,255,255,.24);transform:translateY(-2px)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+          Xem video thực tế
+        </button>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="display:flex;gap:2px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+        </div>
+        <span style="color:#fff;font-weight:800;font-size:15px">4.9/5</span>
+        <span style="color:rgba(255,255,255,.7);font-size:14px;font-weight:500">từ hơn 12.000 đánh giá</span>
+      </div>
+    </div>
+
+    <!-- proof collage -->
+    <div data-reveal style="animation:mktRise .8s .12s cubic-bezier(.2,.7,.3,1) both;position:relative;min-height:440px;display:grid;place-items:center">
+      <div style="position:relative;width:100%;max-width:440px;height:440px">
+        <div style="position:absolute;top:8%;left:0;width:248px;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);padding:18px;animation:mktFloat 7s ease-in-out infinite">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
+            <span style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#FF9D2E,#FF8C00);display:grid;place-items:center;color:#fff;font-weight:900;font-size:15px;flex:none">LA</span>
+            <div style="min-width:0"><div style="font-weight:800;font-size:13.5px;color:var(--ink)">Chị Lan Anna</div><div style="font-size:11.5px;color:var(--ink-faint)">Shop Mẹ &amp; Bé</div></div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:7px"><span style="font-weight:900;font-size:34px;color:var(--orange);line-height:1">x3</span><span style="font-size:13px;color:var(--ink-soft);font-weight:600">đơn hàng / ngày</span></div>
+        </div>
+        <div style="position:absolute;top:2%;right:0;width:214px;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);padding:16px;animation:mktFloat 8.5s ease-in-out infinite .6s">
+          <div style="display:flex;gap:1px;margin-bottom:9px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          </div>
+          <p style="margin:0;font-size:13px;line-height:1.55;color:var(--ink-soft);font-weight:500">"Tự động nhắn tin kết bạn, tiết kiệm 8 tiếng mỗi ngày. Quá đáng tiền!"</p>
+        </div>
+        <div style="position:absolute;bottom:1%;right:0;width:226px;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);padding:16px;animation:mktFloat 7.8s ease-in-out infinite .9s">
+          <div style="display:flex;gap:1px;margin-bottom:9px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          </div>
+          <p style="margin:0;font-size:13px;line-height:1.55;color:var(--ink-soft);font-weight:500">"Đăng bài seeding giúp tôi tăng mạnh hiệu quả livestream"</p>
+        </div>
+        <div style="position:absolute;bottom:13%;left:4%;background:var(--grad-gold);color:var(--navy-900);font-weight:800;font-size:14px;padding:13px 20px;border-radius:var(--r-pill);box-shadow:var(--sh-gold);display:inline-flex;align-items:baseline;gap:7px;animation:mktFloat 7.5s ease-in-out infinite .3s"><span style="font-weight:900;font-size:1.3em">+76%</span> Doanh số</div>
+        <span style="position:absolute;top:42%;left:-2%;width:56px;height:56px;border-radius:50%;background:#1877F2;display:grid;place-items:center;box-shadow:0 0 0 3px #fff,0 16px 30px rgba(10,46,99,.34);animation:mktBob 6s ease-in-out infinite"><img src="https://cdn.simpleicons.org/facebook/ffffff" width="26" height="26" alt="Facebook"></span>
+        <span style="position:absolute;top:54%;right:6%;width:52px;height:52px;border-radius:50%;background:#0068FF;display:grid;place-items:center;box-shadow:0 0 0 3px #fff,0 16px 30px rgba(10,46,99,.34);animation:mktBob2 6.5s ease-in-out infinite"><img src="https://cdn.simpleicons.org/zalo/ffffff" width="24" height="24" alt="Zalo"></span>
+        <span style="position:absolute;bottom:3%;left:20%;width:48px;height:48px;border-radius:50%;background:#000;display:grid;place-items:center;box-shadow:0 0 0 3px #fff,0 16px 30px rgba(10,46,99,.34);animation:mktBob 7s ease-in-out infinite .4s"><img src="https://cdn.simpleicons.org/tiktok/ffffff" width="22" height="22" alt="TikTok"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT STRIP (overlaps hero) -->
+<section style="max-width:1100px;margin:-72px auto 0;padding:0 24px;position:relative;z-index:5" data-counters>
+  <div data-reveal style="animation:mktRise .7s cubic-bezier(.2,.7,.3,1) both;background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);padding:clamp(22px,3vw,34px);display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px">
+    <sc-for list="{{ statCards }}" as="s" hint-placeholder-count="4">
+      <div style="text-align:center;padding:8px 6px">
+        <div id="mkt-stat-{{ s.idx }}" style="font-weight:900;font-size:clamp(30px,3.6vw,42px);line-height:1;background:linear-gradient(135deg,#1565C0,#1E88E5);-webkit-background-clip:text;background-clip:text;color:transparent">{{ s.display }}</div>
+        <div style="margin-top:8px;font-size:14px;font-weight:600;color:var(--ink-soft)">{{ s.label }}</div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- FEATURED CASES -->
+<section style="padding:clamp(56px,7vw,96px) 0;background:#fff">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <div data-reveal style="text-align:center;max-width:680px;margin:0 auto 48px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)">Câu chuyện nổi bật</span>
+      <h2 style="margin:14px 0 12px;font-weight:900;font-size:clamp(28px,3.4vw,42px);line-height:1.12;color:var(--ink);text-wrap:balance">Kết quả thật, không phải lời hứa</h2>
+      <p style="margin:0;font-size:17px;line-height:1.6;color:var(--ink-soft)">Mỗi câu chuyện là một con số đo được — chọn ngành của bạn và xem họ đã làm thế nào.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px">
+      <sc-for list="{{ featuredCases }}" as="c" hint-placeholder-count="3">
+        <div data-reveal style="animation:mktRise .6s cubic-bezier(.2,.7,.3,1) both;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh-sm)" style-hover="transform:translateY(-8px);box-shadow:var(--sh-lg)">
+          <div onClick="{{ c.onOpen }}" style="cursor:pointer;position:relative;height:170px;padding:16px;overflow:hidden;background:{{ c.coverBg }};display:flex;flex-direction:column;justify-content:space-between">
+            <div style="position:absolute;right:-8px;bottom:-26px;font-weight:900;font-size:108px;line-height:1;color:rgba(255,255,255,.12);pointer-events:none">{{ c.bigValue }}</div>
+            <div style="position:relative;z-index:1;display:flex;justify-content:space-between;gap:8px">
+              <span style="background:rgba(255,255,255,.92);color:var(--blue-700);font-weight:800;font-size:12px;padding:6px 12px;border-radius:var(--r-pill)">{{ c.industry }}</span>
+              <span style="background:rgba(10,46,99,.55);color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:var(--r-pill);backdrop-filter:blur(4px)">{{ c.product }}</span>
+            </div>
+            <div style="position:relative;z-index:1;display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.92);font-weight:700;font-size:13px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+              Xem câu chuyện
+            </div>
+          </div>
+          <div style="padding:20px;display:flex;flex-direction:column;gap:14px;flex:1">
+            <h3 onClick="{{ c.onOpen }}" style="cursor:pointer;margin:0;font-weight:800;font-size:18.5px;line-height:1.32;color:var(--ink)">{{ c.title }}</h3>
+            <p style="margin:0;font-style:italic;font-size:14.5px;line-height:1.6;color:var(--ink-soft);flex:1">"{{ c.quote }}"</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <sc-for list="{{ c.metrics }}" as="m" hint-placeholder-count="2">
+                <div style="background:var(--surface);border-radius:12px;padding:12px 14px">
+                  <div style="font-weight:900;font-size:24px;color:var(--orange);line-height:1">{{ m.value }}</div>
+                  <div style="margin-top:4px;font-size:12px;font-weight:600;color:var(--ink-faint)">{{ m.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:center;gap:11px;border-top:1px solid var(--line);padding-top:14px">
+              <span style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#FF9D2E,#FF8C00);display:grid;place-items:center;color:#fff;font-weight:900;font-size:14px;flex:none">{{ c.author.initials }}</span>
+              <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:13.5px;color:var(--ink)">{{ c.author.name }}</div><div style="font-size:12px;color:var(--ink-faint)">{{ c.author.role }}</div></div>
+              <button onClick="{{ c.onShare }}" title="Chia sẻ" style="border:0;cursor:pointer;width:38px;height:38px;border-radius:10px;background:var(--surface);color:var(--ink-soft);display:grid;place-items:center;flex:none;transition:background .15s,color .15s" style-hover="background:var(--blue-700);color:#fff">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div data-reveal style="text-align:center;margin-top:44px">
+      <button onClick="{{ goList }}" style="border:1px solid var(--blue-700);cursor:pointer;font-family:inherit;font-weight:800;font-size:15px;color:var(--blue-700);background:#fff;border-radius:var(--r-pill);padding:15px 32px;display:inline-flex;align-items:center;gap:10px;transition:background .15s,color .15s" style-hover="background:var(--blue-700);color:#fff">
+        Xem tất cả câu chuyện
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED VIDEOS (dark) -->
+<section style="padding:clamp(56px,7vw,96px) 0;background:var(--grad-hero-deep);position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;opacity:.12;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:28px 28px"></div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;padding:0 24px">
+    <div data-reveal style="text-align:center;max-width:680px;margin:0 auto 48px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Video thực tế</span>
+      <h2 style="margin:14px 0 12px;font-weight:900;font-size:clamp(28px,3.4vw,42px);line-height:1.12;color:#fff;text-wrap:balance">Nghe khách hàng kể, tận mắt xem kết quả</h2>
+      <p style="margin:0;font-size:17px;line-height:1.6;color:rgba(255,255,255,.82)">Đánh giá, hướng dẫn và phỏng vấn trực tiếp từ người dùng MKT.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px">
+      <sc-for list="{{ featuredVideos }}" as="v" hint-placeholder-count="3">
+        <div onClick="{{ v.onPlay }}" data-reveal style="animation:mktRise .6s cubic-bezier(.2,.7,.3,1) both;cursor:pointer;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:var(--r-md);overflow:hidden;backdrop-filter:blur(4px)" style-hover="transform:translateY(-8px);background:rgba(255,255,255,.13)">
+          <div style="position:relative;aspect-ratio:16/9;background:{{ v.coverBg }};display:grid;place-items:center;overflow:hidden">
+            <span style="position:absolute;top:12px;left:12px;background:var(--orange);color:#fff;font-weight:800;font-size:11.5px;padding:5px 11px;border-radius:var(--r-pill)">{{ v.cat }}</span>
+            <span style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-weight:700;font-size:12px;padding:4px 9px;border-radius:7px">{{ v.dur }}</span>
+            <span style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;box-shadow:var(--sh-lg);color:var(--blue-700);transition:transform .2s">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="margin-left:3px"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            </span>
+          </div>
+          <div style="padding:18px">
+            <h3 style="margin:0 0 8px;font-weight:800;font-size:16.5px;line-height:1.4;color:#fff">{{ v.title }}</h3>
+            <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,.7)">{{ v.product }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div data-reveal style="text-align:center;margin-top:44px">
+      <button onClick="{{ goVideo }}" style="border:1px solid rgba(255,255,255,.5);cursor:pointer;font-family:inherit;font-weight:800;font-size:15px;color:#fff;background:rgba(255,255,255,.12);backdrop-filter:blur(4px);border-radius:var(--r-pill);padding:15px 32px;display:inline-flex;align-items:center;gap:10px;transition:background .15s,transform .15s" style-hover="background:rgba(255,255,255,.22);transform:translateY(-2px)">
+        Xem tất cả video
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- WALL OF LOVE -->
+<section style="padding:clamp(56px,7vw,96px) 0;background:linear-gradient(180deg,#F4F8FD 0%,#EAF2FB 100%)">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <div data-reveal style="text-align:center;max-width:680px;margin:0 auto 48px">
+      <span style="font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)">Wall of Love</span>
+      <h2 style="margin:14px 0 12px;font-weight:900;font-size:clamp(28px,3.4vw,42px);line-height:1.12;color:var(--ink);text-wrap:balance">Khách hàng nói gì về MKT?</h2>
+    </div>
+    <div style="column-width:330px;column-gap:24px">
+      <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="6">
+        <div data-reveal style="animation:mktRise .6s cubic-bezier(.2,.7,.3,1) both;break-inside:avoid;display:inline-block;width:100%;margin-bottom:24px;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:24px;box-shadow:var(--sh-sm)">
+          <div style="display:flex;gap:2px;margin-bottom:14px">
+            <sc-for list="{{ t.stars }}" as="st" hint-placeholder-count="5">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="#FFD700"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+            </sc-for>
+          </div>
+          <p style="margin:0 0 18px;font-size:15.5px;line-height:1.65;color:var(--ink)">"{{ t.quote }}"</p>
+          <div style="display:flex;align-items:center;gap:11px">
+            <span style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#1565C0,#1E88E5);display:grid;place-items:center;color:#fff;font-weight:900;font-size:14px;flex:none">{{ t.initials }}</span>
+            <div><div style="font-weight:800;font-size:14px;color:var(--ink)">{{ t.name }}</div><div style="font-size:12.5px;color:var(--ink-faint)">{{ t.role }}</div></div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA + LEAD FORM -->
+<section id="mkt-lead" style="padding:clamp(56px,7vw,96px) 0;background:var(--grad-hero-deep);position:relative;overflow:hidden">
+  <div style="position:absolute;top:-100px;right:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,140,0,.34),transparent 70%);filter:blur(20px);pointer-events:none"></div>
+  <div style="position:relative;max-width:980px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:44px;align-items:center">
+    <div data-reveal>
+      <span style="font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Bắt đầu hôm nay</span>
+      <h2 style="margin:14px 0 16px;font-weight:900;font-size:clamp(28px,3.6vw,44px);line-height:1.1;color:#fff;text-wrap:balance">Sẵn sàng trở thành câu chuyện tiếp theo?</h2>
+      <p style="margin:0 0 22px;font-size:17px;line-height:1.6;color:rgba(255,255,255,.86)">Để lại thông tin, đội ngũ MKT sẽ tư vấn lộ trình automation phù hợp cho đúng ngành của bạn — miễn phí.</p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="display:inline-flex;align-items:center;gap:10px;color:#fff;font-weight:600;font-size:15px"><span style="width:24px;height:24px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Bảo hành trọn đời · Hoàn tiền 100%</span>
+        <span style="display:inline-flex;align-items:center;gap:10px;color:#fff;font-weight:600;font-size:15px"><span style="width:24px;height:24px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Hỗ trợ 24/7 · Cập nhật miễn phí</span>
+      </div>
+    </div>
+    <div data-reveal style="background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);padding:28px">
+      <form onSubmit="{{ submitForm }}" style="display:flex;flex-direction:column;gap:16px">
+        <div>
+          <label style="display:block;font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:7px">Họ và tên</label>
+          <input value="{{ form.name }}" onInput="{{ onName }}" placeholder="Nguyễn Văn A" style="width:100%;font-family:inherit;font-size:15px;padding:13px 15px;border-radius:10px;border:{{ nameBorder }};outline:none;background:var(--surface);transition:border .15s,box-shadow .15s" style-focus="border:1px solid var(--blue-500);box-shadow:0 0 0 4px rgba(30,136,229,.16);background:#fff" />
+          <sc-if value="{{ formErr.name }}" hint-placeholder-val="{{ false }}"><div style="margin-top:6px;font-size:12.5px;font-weight:600;color:#E5484D">{{ formErr.name }}</div></sc-if>
+        </div>
+        <div>
+          <label style="display:block;font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:7px">Số điện thoại / Zalo</label>
+          <input value="{{ form.phone }}" onInput="{{ onPhone }}" placeholder="09xx xxx xxx" inputmode="tel" style="width:100%;font-family:inherit;font-size:15px;padding:13px 15px;border-radius:10px;border:{{ phoneBorder }};outline:none;background:var(--surface);transition:border .15s,box-shadow .15s" style-focus="border:1px solid var(--blue-500);box-shadow:0 0 0 4px rgba(30,136,229,.16);background:#fff" />
+          <sc-if value="{{ formErr.phone }}" hint-placeholder-val="{{ false }}"><div style="margin-top:6px;font-size:12.5px;font-weight:600;color:#E5484D">{{ formErr.phone }}</div></sc-if>
+        </div>
+        <div>
+          <label style="display:block;font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:7px">Ngành nghề</label>
+          <select value="{{ form.industry }}" onChange="{{ onIndustry }}" style="width:100%;font-family:inherit;font-size:15px;padding:13px 15px;border-radius:10px;border:1px solid var(--line);outline:none;background:var(--surface);color:var(--ink);cursor:pointer" style-focus="border:1px solid var(--blue-500);box-shadow:0 0 0 4px rgba(30,136,229,.16)">
+            <option value="">— Chọn ngành của bạn —</option>
+            <sc-for list="{{ industryOptions }}" as="ind" hint-placeholder-count="8"><option value="{{ ind }}">{{ ind }}</option></sc-for>
+          </select>
+        </div>
+        <button type="submit" style="border:0;cursor:pointer;font-family:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:15px;color:#fff;background:var(--grad-cta);box-shadow:var(--sh-cta);border-radius:var(--r-pill);padding:16px;width:100%;transition:transform .15s" style-hover="transform:translateY(-2px)" style-active="transform:scale(.97)">Nhận tư vấn miễn phí</button>
+        <p style="margin:0;text-align:center;font-size:12px;color:var(--ink-faint)">Cam kết bảo mật thông tin. Không spam.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</sc-if>
+
+<!-- ============================================================ LIST ============================================================ -->
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+<section style="background:var(--grad-hero-deep);padding:clamp(44px,6vw,72px) 0 clamp(36px,5vw,56px);position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;opacity:.14;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:28px 28px"></div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;padding:0 24px;text-align:center">
+    <span style="font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Thư viện câu chuyện</span>
+    <h1 style="margin:14px 0 12px;font-weight:900;font-size:clamp(30px,4vw,52px);line-height:1.08;text-transform:uppercase;color:#fff;text-wrap:balance">Câu chuyện khách hàng MKT</h1>
+    <p style="margin:0 auto;max-width:620px;font-size:17px;line-height:1.6;color:rgba(255,255,255,.84)">Lọc theo sản phẩm hoặc ngành để xem chính xác kết quả của những người giống bạn.</p>
+  </div>
+</section>
+<section style="padding:clamp(36px,5vw,56px) 0 clamp(56px,7vw,96px);background:#fff">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;justify-content:space-between;margin-bottom:34px">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;flex:1;min-width:0">
+        <sc-for list="{{ productChips }}" as="ch" hint-placeholder-count="6">
+          <button onClick="{{ ch.onClick }}" style="border:{{ ch.border }};cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;padding:10px 18px;border-radius:var(--r-pill);background:{{ ch.bg }};color:{{ ch.color }};box-shadow:{{ ch.shadow }};transition:all .15s">{{ ch.label }}</button>
+        </sc-for>
+      </div>
+      <div style="position:relative;flex:none">
+        <button onClick="{{ toggleIndustry }}" style="border:1px solid var(--line);cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;padding:11px 18px;border-radius:var(--r-pill);background:#fff;color:var(--ink);display:inline-flex;align-items:center;gap:9px">
+          {{ industryLabel }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <sc-if value="{{ industryOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:calc(100% + 8px);right:0;z-index:20;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-lg);padding:7px;min-width:200px;display:flex;flex-direction:column">
+            <sc-for list="{{ industryMenu }}" as="im" hint-placeholder-count="9">
+              <button onClick="{{ im.onClick }}" style="border:0;cursor:pointer;text-align:left;font-family:inherit;font-weight:{{ im.weight }};font-size:14px;padding:10px 13px;border-radius:9px;background:{{ im.bg }};color:{{ im.color }}" style-hover="background:var(--surface)">{{ im.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px">
+        <sc-for list="{{ filteredCases }}" as="c" hint-placeholder-count="6">
+          <div style="background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh-sm);transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-8px);box-shadow:var(--sh-lg)">
+            <div onClick="{{ c.onOpen }}" style="cursor:pointer;position:relative;height:170px;padding:16px;overflow:hidden;background:{{ c.coverBg }};display:flex;flex-direction:column;justify-content:space-between">
+              <div style="position:absolute;right:-8px;bottom:-26px;font-weight:900;font-size:108px;line-height:1;color:rgba(255,255,255,.12);pointer-events:none">{{ c.bigValue }}</div>
+              <div style="position:relative;z-index:1;display:flex;justify-content:space-between;gap:8px">
+                <span style="background:rgba(255,255,255,.92);color:var(--blue-700);font-weight:800;font-size:12px;padding:6px 12px;border-radius:var(--r-pill)">{{ c.industry }}</span>
+                <span style="background:rgba(10,46,99,.55);color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:var(--r-pill);backdrop-filter:blur(4px)">{{ c.product }}</span>
+              </div>
+              <div style="position:relative;z-index:1;display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.92);font-weight:700;font-size:13px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+                Xem câu chuyện
+              </div>
+            </div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:14px;flex:1">
+              <h3 onClick="{{ c.onOpen }}" style="cursor:pointer;margin:0;font-weight:800;font-size:18.5px;line-height:1.32;color:var(--ink)">{{ c.title }}</h3>
+              <p style="margin:0;font-style:italic;font-size:14.5px;line-height:1.6;color:var(--ink-soft);flex:1">"{{ c.quote }}"</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <sc-for list="{{ c.metrics }}" as="m" hint-placeholder-count="2">
+                  <div style="background:var(--surface);border-radius:12px;padding:12px 14px">
+                    <div style="font-weight:900;font-size:24px;color:var(--orange);line-height:1">{{ m.value }}</div>
+                    <div style="margin-top:4px;font-size:12px;font-weight:600;color:var(--ink-faint)">{{ m.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;align-items:center;gap:11px;border-top:1px solid var(--line);padding-top:14px">
+                <span style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#FF9D2E,#FF8C00);display:grid;place-items:center;color:#fff;font-weight:900;font-size:14px;flex:none">{{ c.author.initials }}</span>
+                <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:13.5px;color:var(--ink)">{{ c.author.name }}</div><div style="font-size:12px;color:var(--ink-faint)">{{ c.author.role }}</div></div>
+                <button onClick="{{ c.onShare }}" title="Chia sẻ" style="border:0;cursor:pointer;width:38px;height:38px;border-radius:10px;background:var(--surface);color:var(--ink-soft);display:grid;place-items:center;flex:none;transition:background .15s,color .15s" style-hover="background:var(--blue-700);color:#fff">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:72px 24px">
+        <div style="width:84px;height:84px;border-radius:50%;background:var(--surface);display:grid;place-items:center;margin:0 auto 22px;color:var(--blue-300)">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <h3 style="margin:0 0 8px;font-weight:800;font-size:21px;color:var(--ink)">Chưa có câu chuyện cho lựa chọn này</h3>
+        <p style="margin:0 0 20px;font-size:15px;color:var(--ink-soft)">Thử đổi bộ lọc sản phẩm hoặc ngành nghề khác nhé.</p>
+        <button onClick="{{ resetFilters }}" style="border:1px solid var(--blue-700);cursor:pointer;font-family:inherit;font-weight:800;font-size:14px;color:var(--blue-700);background:#fff;border-radius:var(--r-pill);padding:12px 24px" style-hover="background:var(--blue-700);color:#fff">Xoá bộ lọc</button>
+      </div>
+    </sc-if>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============================================================ DETAIL ============================================================ -->
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+<section style="background:var(--grad-hero-deep);padding:clamp(40px,5vw,64px) 0 clamp(72px,8vw,104px);position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;opacity:.14;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:28px 28px"></div>
+  <div style="position:relative;max-width:880px;margin:0 auto;padding:0 24px">
+    <button onClick="{{ goList }}" style="border:0;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:var(--r-pill);display:inline-flex;align-items:center;gap:8px;margin-bottom:24px" style-hover="background:rgba(255,255,255,.22)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Tất cả câu chuyện
+    </button>
+    <div style="display:flex;gap:10px;margin-bottom:18px">
+      <span style="background:rgba(255,255,255,.92);color:var(--blue-700);font-weight:800;font-size:12.5px;padding:7px 14px;border-radius:var(--r-pill)">{{ detailCase.industry }}</span>
+      <span style="background:rgba(255,255,255,.14);color:#fff;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:var(--r-pill);border:1px solid rgba(255,255,255,.3)">{{ detailCase.product }}</span>
+    </div>
+    <h1 style="margin:0 0 24px;font-weight:900;font-size:clamp(28px,3.6vw,46px);line-height:1.12;color:#fff;text-wrap:balance">{{ detailCase.title }}</h1>
+    <div style="display:flex;align-items:center;gap:13px">
+      <span style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#FF9D2E,#FF8C00);display:grid;place-items:center;color:#fff;font-weight:900;font-size:18px;flex:none">{{ detailCase.author.initials }}</span>
+      <div><div style="font-weight:800;font-size:16px;color:#fff">{{ detailCase.author.name }}</div><div style="font-size:13.5px;color:rgba(255,255,255,.75)">{{ detailCase.author.role }}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- metric strip -->
+<section style="max-width:880px;margin:-56px auto 0;padding:0 24px;position:relative;z-index:5">
+  <div style="background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);padding:clamp(20px,3vw,30px);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px">
+    <sc-for list="{{ detailCase.bigMetrics }}" as="m" hint-placeholder-count="3">
+      <div style="text-align:center;padding:8px">
+        <div style="font-weight:900;font-size:clamp(30px,4vw,44px);color:var(--orange);line-height:1">{{ m.value }}</div>
+        <div style="margin-top:8px;font-size:14px;font-weight:600;color:var(--ink-soft)">{{ m.label }}</div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- body -->
+<section style="padding:clamp(48px,6vw,80px) 0;background:#fff">
+  <div style="max-width:760px;margin:0 auto;padding:0 24px;display:flex;flex-direction:column;gap:40px">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:14px"><span style="width:32px;height:32px;border-radius:9px;background:rgba(255,64,129,.12);color:var(--pink);display:grid;place-items:center;font-weight:900;flex:none">1</span><h2 style="margin:0;font-weight:800;font-size:24px;color:var(--ink)">Vấn đề</h2></div>
+      <p style="margin:0;font-size:17px;line-height:1.75;color:var(--ink-soft)">{{ detailCase.body.problem }}</p>
+    </div>
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:14px"><span style="width:32px;height:32px;border-radius:9px;background:rgba(21,101,192,.12);color:var(--blue-700);display:grid;place-items:center;font-weight:900;flex:none">2</span><h2 style="margin:0;font-weight:800;font-size:24px;color:var(--ink)">Giải pháp với {{ detailCase.product }}</h2></div>
+      <p style="margin:0 0 18px;font-size:17px;line-height:1.75;color:var(--ink-soft)">{{ detailCase.body.solution }}</p>
+      <div style="background:var(--grad-product);border-radius:var(--r-md);padding:26px;display:flex;align-items:center;gap:16px;box-shadow:var(--sh-md)">
+        <span style="font-weight:900;font-size:40px;color:var(--gold);line-height:1;flex:none">"</span>
+        <p style="margin:0;font-size:17px;line-height:1.6;color:#fff;font-weight:600;font-style:italic">{{ detailCase.quote }}</p>
+      </div>
+    </div>
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:14px"><span style="width:32px;height:32px;border-radius:9px;background:rgba(46,204,113,.14);color:var(--green-600);display:grid;place-items:center;font-weight:900;flex:none">3</span><h2 style="margin:0;font-weight:800;font-size:24px;color:var(--ink)">Kết quả</h2></div>
+      <p style="margin:0;font-size:17px;line-height:1.75;color:var(--ink-soft)">{{ detailCase.body.result }}</p>
+    </div>
+
+    <!-- share -->
+    <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0;display:flex;flex-wrap:wrap;align-items:center;gap:14px">
+      <span style="font-weight:800;font-size:15px;color:var(--ink);margin-right:4px">Chia sẻ câu chuyện:</span>
+      <button onClick="{{ shareZalo }}" style="border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;color:#fff;background:#0068FF;border-radius:10px;padding:11px 18px;display:inline-flex;align-items:center;gap:9px" style-hover="filter:brightness(1.08)"><img src="https://cdn.simpleicons.org/zalo/ffffff" width="17" height="17" alt="">Zalo</button>
+      <button onClick="{{ shareFb }}" style="border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;color:#fff;background:#1877F2;border-radius:10px;padding:11px 18px;display:inline-flex;align-items:center;gap:9px" style-hover="filter:brightness(1.08)"><img src="https://cdn.simpleicons.org/facebook/ffffff" width="17" height="17" alt="">Facebook</button>
+      <button onClick="{{ shareCopy }}" style="border:1px solid var(--line);cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;color:var(--ink-soft);background:#fff;border-radius:10px;padding:11px 18px;display:inline-flex;align-items:center;gap:9px" style-hover="background:var(--surface);color:var(--blue-700)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Sao chép link
+      </button>
+    </div>
+
+    <!-- CTA -->
+    <div style="background:linear-gradient(135deg,#FFF6E9,#FFEAD2);border:1px solid #FFD9A8;border-radius:var(--r-md);padding:30px;text-align:center">
+      <h3 style="margin:0 0 8px;font-weight:900;font-size:22px;color:var(--ink)">Ngành của bạn cũng làm được điều này</h3>
+      <p style="margin:0 0 20px;font-size:15.5px;color:var(--ink-soft)">Nhận tư vấn lộ trình automation riêng cho doanh nghiệp của bạn.</p>
+      <button onClick="{{ openForm }}" style="border:0;cursor:pointer;font-family:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:15px;color:#fff;background:var(--grad-cta);box-shadow:var(--sh-cta);border-radius:var(--r-pill);padding:15px 32px;transition:transform .15s" style-hover="transform:translateY(-2px)" style-active="transform:scale(.96)">Nhận tư vấn cho ngành của bạn</button>
+    </div>
+  </div>
+</section>
+
+<!-- related -->
+<section style="padding:clamp(48px,6vw,80px) 0;background:var(--surface)">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <h2 style="margin:0 0 30px;font-weight:900;font-size:clamp(24px,3vw,34px);color:var(--ink);text-align:center">Câu chuyện liên quan</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px">
+      <sc-for list="{{ relatedCases }}" as="c" hint-placeholder-count="3">
+        <div style="background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh-sm);transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-8px);box-shadow:var(--sh-lg)">
+          <div onClick="{{ c.onOpen }}" style="cursor:pointer;position:relative;height:150px;padding:16px;overflow:hidden;background:{{ c.coverBg }};display:flex;flex-direction:column;justify-content:space-between">
+            <div style="position:absolute;right:-8px;bottom:-26px;font-weight:900;font-size:96px;line-height:1;color:rgba(255,255,255,.12);pointer-events:none">{{ c.bigValue }}</div>
+            <div style="position:relative;z-index:1;display:flex;justify-content:space-between;gap:8px">
+              <span style="background:rgba(255,255,255,.92);color:var(--blue-700);font-weight:800;font-size:12px;padding:6px 12px;border-radius:var(--r-pill)">{{ c.industry }}</span>
+              <span style="background:rgba(10,46,99,.55);color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:var(--r-pill);backdrop-filter:blur(4px)">{{ c.product }}</span>
+            </div>
+          </div>
+          <div style="padding:18px;display:flex;flex-direction:column;gap:12px;flex:1">
+            <h3 onClick="{{ c.onOpen }}" style="cursor:pointer;margin:0;font-weight:800;font-size:17px;line-height:1.34;color:var(--ink)">{{ c.title }}</h3>
+            <div style="display:flex;gap:14px;margin-top:auto">
+              <sc-for list="{{ c.metrics }}" as="m" hint-placeholder-count="2">
+                <div><span style="font-weight:900;font-size:20px;color:var(--orange)">{{ m.value }}</span> <span style="font-size:12px;color:var(--ink-faint);font-weight:600">{{ m.label }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============================================================ VIDEO ============================================================ -->
+<sc-if value="{{ isVideo }}" hint-placeholder-val="{{ false }}">
+<section style="background:var(--grad-hero-deep);padding:clamp(44px,6vw,72px) 0 clamp(36px,5vw,56px);position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;opacity:.14;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:28px 28px"></div>
+  <div style="position:relative;max-width:1200px;margin:0 auto;padding:0 24px;text-align:center">
+    <span style="font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Thư viện video</span>
+    <h1 style="margin:14px 0 12px;font-weight:900;font-size:clamp(30px,4vw,52px);line-height:1.08;text-transform:uppercase;color:#fff;text-wrap:balance">Xem MKT hoạt động thực tế</h1>
+    <p style="margin:0 auto;max-width:620px;font-size:17px;line-height:1.6;color:rgba(255,255,255,.84)">Đánh giá, hướng dẫn, phỏng vấn và case study — bấm để xem.</p>
+  </div>
+</section>
+<section style="padding:clamp(36px,5vw,56px) 0 clamp(56px,7vw,96px);background:#fff">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <div style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <span style="font-weight:700;font-size:13px;color:var(--ink-faint);margin-right:4px">Chủ đề:</span>
+      <sc-for list="{{ catChips }}" as="ch" hint-placeholder-count="5">
+        <button onClick="{{ ch.onClick }}" style="border:{{ ch.border }};cursor:pointer;font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:var(--r-pill);background:{{ ch.bg }};color:{{ ch.color }};box-shadow:{{ ch.shadow }};transition:all .15s">{{ ch.label }}</button>
+      </sc-for>
+    </div>
+    <div style="margin-bottom:34px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <span style="font-weight:700;font-size:13px;color:var(--ink-faint);margin-right:4px">Sản phẩm:</span>
+      <sc-for list="{{ vProductChips }}" as="ch" hint-placeholder-count="6">
+        <button onClick="{{ ch.onClick }}" style="border:{{ ch.border }};cursor:pointer;font-family:inherit;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:var(--r-pill);background:{{ ch.bg }};color:{{ ch.color }};box-shadow:{{ ch.shadow }};transition:all .15s">{{ ch.label }}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ hasVideos }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px">
+        <sc-for list="{{ filteredVideos }}" as="v" hint-placeholder-count="6">
+          <div onClick="{{ v.onPlay }}" style="cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-sm);transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-8px);box-shadow:var(--sh-lg)">
+            <div style="position:relative;aspect-ratio:16/9;background:{{ v.coverBg }};display:grid;place-items:center;overflow:hidden">
+              <span style="position:absolute;top:12px;left:12px;background:var(--orange);color:#fff;font-weight:800;font-size:11.5px;padding:5px 11px;border-radius:var(--r-pill)">{{ v.cat }}</span>
+              <span style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-weight:700;font-size:12px;padding:4px 9px;border-radius:7px">{{ v.dur }}</span>
+              <span style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;box-shadow:var(--sh-lg);color:var(--blue-700)">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="margin-left:3px"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+              </span>
+            </div>
+            <div style="padding:18px">
+              <h3 style="margin:0 0 8px;font-weight:800;font-size:16.5px;line-height:1.4;color:var(--ink)">{{ v.title }}</h3>
+              <span style="font-size:13px;font-weight:600;color:var(--ink-faint)">{{ v.product }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noVideos }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:72px 24px">
+        <div style="width:84px;height:84px;border-radius:50%;background:var(--surface);display:grid;place-items:center;margin:0 auto 22px;color:var(--blue-300)">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <h3 style="margin:0 0 8px;font-weight:800;font-size:21px;color:var(--ink)">Chưa có video cho lựa chọn này</h3>
+        <p style="margin:0 0 20px;font-size:15px;color:var(--ink-soft)">Thử đổi chủ đề hoặc sản phẩm khác nhé.</p>
+        <button onClick="{{ resetVideoFilters }}" style="border:1px solid var(--blue-700);cursor:pointer;font-family:inherit;font-weight:800;font-size:14px;color:var(--blue-700);background:#fff;border-radius:var(--r-pill);padding:12px 24px" style-hover="background:var(--blue-700);color:#fff">Xoá bộ lọc</button>
+      </div>
+    </sc-if>
+  </div>
+</section>
+</sc-if>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer style="background:#0A1A30;color:rgba(255,255,255,.7);padding:clamp(48px,6vw,72px) 0 32px">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:36px;margin-bottom:44px">
+      <div>
+        <img src="assets/logo/mkt-symbol.png" alt="MKT" style="height:40px;margin-bottom:14px" />
+        <p style="margin:0 0 16px;font-size:14px;line-height:1.7">Phần mềm Marketing AI đa kênh #1 Việt Nam. Tự động hoá để bạn chốt đơn thả ga.</p>
+        <div style="display:flex;gap:10px">
+          <span style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);display:grid;place-items:center"><img src="https://cdn.simpleicons.org/facebook/ffffff" width="18" height="18" alt="Facebook"></span>
+          <span style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);display:grid;place-items:center"><img src="https://cdn.simpleicons.org/youtube/ffffff" width="18" height="18" alt="YouTube"></span>
+          <span style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);display:grid;place-items:center"><img src="https://cdn.simpleicons.org/tiktok/ffffff" width="16" height="16" alt="TikTok"></span>
+        </div>
+      </div>
+      <div>
+        <h4 style="margin:0 0 16px;color:#fff;font-weight:800;font-size:15px">Sản phẩm</h4>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px">
+          <a style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">MKT UID</a>
+          <a style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">MKT Zalo</a>
+          <a style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">MKT Care</a>
+          <a style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">MKT Post</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="margin:0 0 16px;color:#fff;font-weight:800;font-size:15px">Khám phá</h4>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px">
+          <a onClick="{{ goList }}" style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">Câu chuyện khách hàng</a>
+          <a onClick="{{ goVideo }}" style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">Thư viện video</a>
+          <a style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">Bảng giá</a>
+          <a style="cursor:pointer;text-decoration:none;color:inherit" style-hover="color:#fff">Blog</a>
+        </div>
+      </div>
+      <div>
+        <h4 style="margin:0 0 16px;color:#fff;font-weight:800;font-size:15px">Liên hệ</h4>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px">
+          <span style="display:inline-flex;align-items:center;gap:9px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>1900 9999</span>
+          <span>phanmemmkt.vn</span>
+          <span>Toà nhà MKT, Hà Nội</span>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px">
+      <span>© 2026 Phần mềm MKT. Bảo lưu mọi quyền.</span>
+      <span>HIỆU QUẢ – NHANH – DỄ DÙNG</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<!-- ================= VIDEO MODAL ================= -->
+<sc-if value="{{ videoOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeVideo }}" style="position:fixed;inset:0;z-index:100;background:rgba(7,20,40,.82);backdrop-filter:blur(8px);display:grid;place-items:center;padding:24px">
+    <div onClick="{{ stop }}" style="position:relative;width:100%;max-width:840px;animation:mktModalIn .26s cubic-bezier(.2,.8,.3,1)">
+      <button onClick="{{ closeVideo }}" style="position:absolute;top:-52px;right:0;border:0;cursor:pointer;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;display:grid;place-items:center;transition:transform .2s,background .2s" style-hover="background:rgba(255,255,255,.28);transform:rotate(90deg)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div style="border-radius:var(--r-md);overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.6)">
+        <div style="position:relative;aspect-ratio:16/9;background:{{ videoModal.coverBg }};display:grid;place-items:center">
+          <div style="position:absolute;inset:0;opacity:.12;background-image:radial-gradient(rgba(255,255,255,.6) 1px,transparent 1px);background-size:24px 24px"></div>
+          <div style="position:relative;text-align:center;color:#fff">
+            <span style="width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;margin:0 auto 16px;color:var(--blue-700);box-shadow:var(--sh-lg)">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" style="margin-left:4px"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            </span>
+            <p style="margin:0;font-weight:700;font-size:14px;opacity:.85">Video demo • {{ videoModal.dur }}</p>
+          </div>
+        </div>
+        <div style="background:#0F2540;padding:20px 24px">
+          <span style="display:inline-block;background:var(--orange);color:#fff;font-weight:800;font-size:11.5px;padding:4px 11px;border-radius:var(--r-pill);margin-bottom:10px">{{ videoModal.cat }}</span>
+          <h3 style="margin:0;font-weight:800;font-size:18px;line-height:1.4;color:#fff">{{ videoModal.title }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= FLOATING MOBILE CTA ================= -->
+<button data-floating-cta onClick="{{ openForm }}" style="position:fixed;left:16px;right:16px;bottom:16px;z-index:80;border:0;cursor:pointer;font-family:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:15px;color:#fff;background:var(--grad-cta);box-shadow:var(--sh-cta);border-radius:var(--r-pill);padding:16px;display:flex;align-items:center;justify-content:center;gap:9px">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  Nhận tư vấn miễn phí
+</button>
+
+<!-- ================= TOAST ================= -->
+<sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;left:50%;bottom:28px;z-index:120;transform:translateX(-50%);background:#0F2540;color:#fff;font-weight:700;font-size:14.5px;padding:14px 22px;border-radius:var(--r-pill);box-shadow:0 18px 40px rgba(0,0,0,.4);display:inline-flex;align-items:center;gap:11px;animation:mktToastIn .3s cubic-bezier(.2,.8,.3,1)">
+    <span style="width:24px;height:24px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+    {{ toast }}
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    page: 'home', detailSlug: 'shop-anna',
+    productFilter: 'Tất cả', industryFilter: 'Tất cả ngành', industryOpen: false,
+    videoCat: 'Tất cả', videoProduct: 'Tất cả',
+    menuOpen: false, videoModal: null, toast: null,
+    form: { name: '', phone: '', industry: '' }, formErr: {},
+  };
+
+  fmt = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+  stats = [
+    { num: 100000, suffix: '+', label: 'Người dùng tin dùng' },
+    { num: 76, prefix: '+', suffix: '%', label: 'Tăng doanh số trung bình' },
+    { num: 8, suffix: 'h', label: 'Tiết kiệm mỗi ngày' },
+    { num: 16, suffix: '+', label: 'Công cụ automation' },
+  ];
+
+  logos = ['Shop Mẹ & Bé Anna', 'Thời Trang LUXE', 'Nội Thất Hoàng Gia', 'Mỹ Phẩm Hương Sen', 'Gia Dụng Minh Phát', 'Học Viện E-Talk', 'BĐS Đất Vàng', 'Quán Ăn Ngon'];
+
+  covers = [
+    'linear-gradient(135deg,#0A2E63 0%,#1565C0 100%)',
+    'linear-gradient(135deg,#1565C0 0%,#1E88E5 100%)',
+    'linear-gradient(135deg,#0D47A1 0%,#42A5F5 100%)',
+    'linear-gradient(150deg,#0A2E63 0%,#1976D2 100%)',
+  ];
+
+  cases = [
+    {
+      slug: 'shop-anna', industry: 'Bán lẻ', product: 'MKT Zalo',
+      title: 'Tăng x3 đơn hàng mỗi ngày chỉ sau 2 tháng dùng MKT Zalo',
+      quote: 'Trước đây mình nhắn tin tay cả ngày không xuể. Giờ phần mềm tự kết bạn, tự chăm sóc — sáng nào mở máy cũng có đơn.',
+      metrics: [{ value: 'x3', label: 'Đơn / ngày' }, { value: '-70%', label: 'Thời gian' }],
+      bigMetrics: [{ value: 'x3', label: 'Đơn hàng mỗi ngày' }, { value: '-70%', label: 'Thời gian chăm sóc' }, { value: '12.000+', label: 'Bạn bè Zalo mới' }],
+      author: { name: 'Nguyễn Thị Lan', role: 'Chủ shop Mẹ & Bé Anna', initials: 'LA' },
+      body: {
+        problem: 'Chị Lan vận hành một shop mẹ và bé với hàng nghìn khách trên Zalo. Mỗi ngày chị mất gần như toàn bộ thời gian để kết bạn, nhắn tin và gửi chương trình khuyến mãi thủ công — vừa chậm, vừa bỏ sót khách, lại không thể mở rộng tệp khách hàng.',
+        solution: 'Với MKT Zalo, chị thiết lập kịch bản tự động kết bạn theo nhóm khách mục tiêu, gửi tin nhắn chăm sóc và nuôi tài khoản theo lịch. Phần mềm chạy nền cả ngày, chị chỉ cần kiểm tra đơn và chốt sale.',
+        result: 'Sau 2 tháng, lượng đơn mỗi ngày tăng gấp ba, thời gian chăm sóc khách giảm 70%, và tệp bạn bè Zalo tăng thêm hơn 12.000 người — tất cả mà không cần thuê thêm nhân sự.',
+      },
+    },
+    {
+      slug: 'luxe', industry: 'Thời trang', product: 'MKT UID',
+      title: 'Quét 50.000 UID khách tiềm năng, giảm 60% chi phí quảng cáo',
+      quote: 'Có data đúng tệp, mỗi đồng quảng cáo đều đáng giá. Chi phí trên mỗi đơn của shop giảm hẳn một nửa.',
+      metrics: [{ value: '50.000', label: 'UID khách' }, { value: '-60%', label: 'Chi phí ads' }],
+      bigMetrics: [{ value: '50.000', label: 'UID khách tiềm năng' }, { value: '-60%', label: 'Chi phí quảng cáo' }, { value: 'x2.5', label: 'Tỷ lệ chuyển đổi' }],
+      author: { name: 'Trần Minh Quân', role: 'Founder Thời Trang LUXE', initials: 'MQ' },
+      body: {
+        problem: 'Shop thời trang LUXE đốt ngân sách quảng cáo lớn nhưng tệp khách quá rộng, tỷ lệ chuyển đổi thấp và chi phí trên mỗi đơn ngày một tăng.',
+        solution: 'MKT UID giúp đội marketing quét chính xác UID của những người đã tương tác với các fanpage thời trang cùng phân khúc, lọc theo độ tuổi và hành vi, sau đó đưa vào tệp quảng cáo target.',
+        result: 'Chỉ trong một chiến dịch, shop thu về 50.000 UID chất lượng, chi phí quảng cáo giảm 60% và tỷ lệ chuyển đổi tăng gấp 2,5 lần so với chạy quảng cáo rộng như trước.',
+      },
+    },
+    {
+      slug: 'hoanggia', industry: 'Nội thất', product: 'MKT Care',
+      title: 'Nuôi 30 nick Facebook tự động, phủ sóng toàn thành phố',
+      quote: 'Một mình tôi không thể trực 30 tài khoản. MKT Care làm điều đó cả ngày lẫn đêm, đều như vắt chanh.',
+      metrics: [{ value: '30', label: 'Nick nuôi' }, { value: 'x5', label: 'Tiếp cận' }],
+      bigMetrics: [{ value: '30', label: 'Tài khoản nuôi tự động' }, { value: 'x5', label: 'Lượng tiếp cận' }, { value: '0', label: 'Nick bị khoá' }],
+      author: { name: 'Lê Văn Hoàng', role: 'Chủ xưởng Nội Thất Hoàng Gia', initials: 'VH' },
+      body: {
+        problem: 'Anh Hoàng cần phủ sản phẩm nội thất trên nhiều khu vực nhưng việc duy trì hàng chục tài khoản Facebook "sống" để đăng bài là bất khả thi khi làm thủ công, và nick rất dễ bị khoá.',
+        solution: 'MKT Care tự động hoá việc nuôi nick: tương tác, like, đăng bài và kết bạn theo hành vi người dùng thật, giúp tài khoản an toàn và uy tín hơn theo thời gian.',
+        result: 'Anh duy trì ổn định 30 tài khoản, lượng tiếp cận tăng gấp 5 lần và không có tài khoản nào bị khoá trong suốt quá trình triển khai.',
+      },
+    },
+    {
+      slug: 'huongsen', industry: 'Mỹ phẩm', product: 'MKT Post',
+      title: 'Đăng 200 bài mỗi ngày lên đa nhóm, doanh số +120%',
+      quote: 'Nội dung của tôi giờ xuất hiện ở khắp các hội nhóm mục tiêu. Đơn về liên tục, không còn cảnh ngồi đăng tay từng bài.',
+      metrics: [{ value: '+120%', label: 'Doanh số' }, { value: '200', label: 'Bài / ngày' }],
+      bigMetrics: [{ value: '+120%', label: 'Doanh số' }, { value: '200', label: 'Bài đăng mỗi ngày' }, { value: '350+', label: 'Nhóm phủ sóng' }],
+      author: { name: 'Phạm Thu Hương', role: 'Chủ thương hiệu Mỹ Phẩm Hương Sen', initials: 'TH' },
+      body: {
+        problem: 'Chị Hương có sản phẩm tốt nhưng độ phủ thấp. Đăng bài thủ công lên từng nhóm vừa tốn thời gian vừa không thể duy trì tần suất đủ để tạo nhận diện.',
+        solution: 'MKT Post cho phép chị soạn nội dung một lần rồi tự động đăng hàng loạt lên hàng trăm nhóm mục tiêu theo lịch, kèm xoay nội dung để tránh trùng lặp.',
+        result: 'Thương hiệu phủ sóng hơn 350 nhóm, đăng tới 200 bài mỗi ngày và doanh số tăng 120% chỉ sau một quý.',
+      },
+    },
+    {
+      slug: 'etalk', industry: 'Giáo dục', product: 'MKT Traffic',
+      title: 'Kéo hơn 1.000 lượt traffic mỗi ngày về fanpage khoá học',
+      quote: 'Fanpage trước đây vắng tanh. Giờ tương tác tăng vọt, học viên đăng ký tư vấn mỗi ngày.',
+      metrics: [{ value: '1.000+', label: 'Traffic / ngày' }, { value: 'x4', label: 'Đăng ký' }],
+      bigMetrics: [{ value: '1.000+', label: 'Lượt traffic mỗi ngày' }, { value: 'x4', label: 'Lượt đăng ký tư vấn' }, { value: '+260%', label: 'Tương tác fanpage' }],
+      author: { name: 'Đỗ Quốc Anh', role: 'Giám đốc Học Viện Anh Ngữ E-Talk', initials: 'QA' },
+      body: {
+        problem: 'Học viện E-Talk có fanpage nhưng lượng truy cập tự nhiên thấp, ít tương tác nên các bài tuyển sinh khó tiếp cận học viên tiềm năng.',
+        solution: 'MKT Traffic tự động đưa tài khoản vào nhóm, tăng tương tác và điều hướng lưu lượng về fanpage và bài viết tuyển sinh một cách đều đặn.',
+        result: 'Fanpage nhận hơn 1.000 lượt traffic mỗi ngày, tương tác tăng 260% và số lượt đăng ký tư vấn khoá học tăng gấp 4 lần.',
+      },
+    },
+    {
+      slug: 'quananngon', industry: 'F&B', product: 'MKT Viral',
+      title: 'Bài seeding chạm 2 triệu reach, kín bàn mỗi cuối tuần',
+      quote: 'Một bài viral đúng cách kéo khách kín quán cả cuối tuần. Chi phí gần như bằng không.',
+      metrics: [{ value: '2 triệu', label: 'Reach' }, { value: '+85%', label: 'Đơn' }],
+      bigMetrics: [{ value: '2 triệu', label: 'Lượt tiếp cận' }, { value: '+85%', label: 'Lượng khách' }, { value: '5.000+', label: 'Lượt chia sẻ' }],
+      author: { name: 'Vũ Thị Mai', role: 'Chủ chuỗi Quán Ăn Ngon', initials: 'TM' },
+      body: {
+        problem: 'Quán ăn của chị Mai phụ thuộc vào khách quen, các dịp cuối tuần lại không ổn định và ngân sách marketing rất hạn chế.',
+        solution: 'MKT Viral hỗ trợ tạo và seeding nội dung hấp dẫn vào đúng các nhóm ăn uống địa phương, đẩy lượt tương tác và chia sẻ tự nhiên.',
+        result: 'Một chiến dịch seeding chạm 2 triệu lượt tiếp cận, hơn 5.000 lượt chia sẻ và lượng khách cuối tuần tăng 85% — gần như không tốn chi phí quảng cáo.',
+      },
+    },
+    {
+      slug: 'datvang', industry: 'BĐS', product: 'MKT Maps',
+      title: 'Quét 8.000 data doanh nghiệp từ Google Maps chỉ trong một đêm',
+      quote: 'Đội sale của tôi có ngay danh sách khách B2B chất lượng, không phải đi tìm thủ công nữa.',
+      metrics: [{ value: '8.000', label: 'Data B2B' }, { value: '1 đêm', label: 'Thời gian' }],
+      bigMetrics: [{ value: '8.000', label: 'Data doanh nghiệp' }, { value: '1 đêm', label: 'Thời gian quét' }, { value: 'x3', label: 'Lịch hẹn sale' }],
+      author: { name: 'Hoàng Đức Thắng', role: 'Trưởng phòng KD, BĐS Đất Vàng', initials: 'ĐT' },
+      body: {
+        problem: 'Đội sale BĐS cần danh sách doanh nghiệp theo khu vực để chào dịch vụ cho thuê văn phòng, nhưng việc tìm thông tin thủ công trên Google Maps quá chậm.',
+        solution: 'MKT Maps quét tự động tên, địa chỉ, số điện thoại và lĩnh vực của doanh nghiệp theo khu vực và từ khoá mục tiêu, xuất ra danh sách sạch để đội sale dùng ngay.',
+        result: 'Chỉ trong một đêm chạy, đội thu về 8.000 data doanh nghiệp, giúp số lịch hẹn của sale tăng gấp 3 lần ngay tháng đầu.',
+      },
+    },
+    {
+      slug: 'minhphat', industry: 'Gia dụng', product: 'MKT Group',
+      title: 'Quản lý 120 nhóm Facebook, đơn sỉ tăng gấp đôi',
+      quote: 'Tất cả nhóm bán sỉ của tôi được đăng bài và quản lý từ một nơi. Đơn sỉ tăng gấp đôi trong 3 tháng.',
+      metrics: [{ value: '120', label: 'Nhóm' }, { value: 'x2', label: 'Đơn sỉ' }],
+      bigMetrics: [{ value: '120', label: 'Nhóm quản lý' }, { value: 'x2', label: 'Đơn sỉ' }, { value: '-80%', label: 'Công sức vận hành' }],
+      author: { name: 'Bùi Văn Phát', role: 'Chủ Gia Dụng Minh Phát', initials: 'VP' },
+      body: {
+        problem: 'Anh Phát bán sỉ gia dụng qua hàng trăm nhóm Facebook nhưng việc đăng bài, theo dõi và trả lời ở từng nhóm riêng lẻ khiến anh quá tải.',
+        solution: 'MKT Group gom toàn bộ nhóm về một bảng điều khiển, cho phép đăng bài hàng loạt theo lịch, lọc nhóm hiệu quả và quản lý tương tác tập trung.',
+        result: 'Anh quản lý gọn 120 nhóm, giảm 80% công sức vận hành và lượng đơn sỉ tăng gấp đôi chỉ sau 3 tháng.',
+      },
+    },
+  ];
+
+  videos = [
+    { id: 'v1', cat: 'Đánh giá', product: 'MKT Zalo', title: 'Chủ shop thời trang đánh giá thật sau 6 tháng dùng MKT', dur: '4:12' },
+    { id: 'v2', cat: 'Hướng dẫn', product: 'MKT UID', title: 'Hướng dẫn quét 10.000 UID khách tiềm năng trong 5 phút', dur: '8:30' },
+    { id: 'v3', cat: 'Phỏng vấn', product: 'MKT Care', title: 'Phỏng vấn anh Tuấn — nuôi 30 nick bán nội thất', dur: '6:45' },
+    { id: 'v4', cat: 'Case study', product: 'MKT Post', title: 'Câu chuyện shop mỹ phẩm tăng 120% doanh số', dur: '5:20' },
+    { id: 'v5', cat: 'Hướng dẫn', product: 'MKT Traffic', title: 'Cách kéo 1.000 traffic mỗi ngày về fanpage khoá học', dur: '7:08' },
+    { id: 'v6', cat: 'Đánh giá', product: 'MKT Viral', title: 'Review tính năng seeding viral mới nhất của MKT', dur: '3:55' },
+  ];
+
+  testimonials = [
+    { rating: 5, quote: 'Phần mềm dễ dùng bất ngờ, cài xong là chạy được luôn. Đội hỗ trợ trả lời cực nhanh, có gì cũng được hướng dẫn tận tình.', name: 'Ngô Thanh Tùng', role: 'Chủ shop điện tử', initials: 'TT' },
+    { rating: 5, quote: 'Quét data 1 click, tiết kiệm cho tôi gần 8 tiếng mỗi ngày. Tính ra rẻ hơn thuê một nhân viên mà hiệu quả gấp mấy lần.', name: 'Lý Hồng Nhung', role: 'Mỹ phẩm handmade', initials: 'HN' },
+    { rating: 5, quote: 'Doanh số quý vừa rồi tăng 76% so với cùng kỳ. Tôi không nghĩ marketing automation lại tạo khác biệt lớn đến vậy cho một shop nhỏ.', name: 'Trương Đình Khoa', role: 'Founder cửa hàng thể thao', initials: 'ĐK' },
+    { rating: 5, quote: 'Nuôi nick an toàn, đăng bài đều mỗi ngày mà không lo bị khoá. Dùng nửa năm rồi vẫn ổn định.', name: 'Đặng Mỹ Linh', role: 'Kinh doanh thời trang', initials: 'ML' },
+    { rating: 5, quote: 'Bảo hành trọn đời và cập nhật miễn phí là điểm tôi thích nhất. Mua một lần dùng mãi, yên tâm tuyệt đối.', name: 'Phan Quốc Bảo', role: 'Chủ chuỗi F&B', initials: 'QB' },
+    { rating: 5, quote: 'Từ một người mù công nghệ, tôi vẫn tự chạy được mọi thứ nhờ giao diện tiếng Việt rõ ràng và video hướng dẫn chi tiết.', name: 'Hồ Thị Hạnh', role: 'Tiểu thương online', initials: 'TH' },
+  ];
+
+  productList = ['Tất cả', 'MKT Zalo', 'MKT UID', 'MKT Care', 'MKT Post', 'MKT Traffic', 'MKT Viral', 'MKT Maps', 'MKT Group'];
+  industryList = ['Tất cả ngành', 'Bán lẻ', 'Thời trang', 'Nội thất', 'Mỹ phẩm', 'Giáo dục', 'F&B', 'BĐS', 'Gia dụng'];
+  videoCats = ['Tất cả', 'Đánh giá', 'Hướng dẫn', 'Phỏng vấn', 'Case study'];
+  videoProductList = ['Tất cả', 'MKT Zalo', 'MKT UID', 'MKT Care', 'MKT Post', 'MKT Traffic', 'MKT Viral'];
+
+  componentDidMount() {
+    this._scan = () => {
+      if (this._counted) return;
+      const vh = window.innerHeight || 800;
+      const c = document.querySelector('[data-counters]');
+      if (c && c.getBoundingClientRect().top < vh * 0.92) this.animateCounts();
+    };
+    window.addEventListener('scroll', this._scan, { passive: true });
+    window.addEventListener('resize', this._scan);
+    this._scan();
+    [120, 400, 900].forEach((t) => setTimeout(this._scan, t));
+    this._key = (e) => { if (e.key === 'Escape') this.setState({ videoModal: null, menuOpen: false, industryOpen: false }); };
+    window.addEventListener('keydown', this._key);
+  }
+  componentDidUpdate(pp, ps) {
+    if (ps && ps.page !== this.state.page) { window.scrollTo(0, 0); if (this._scan) setTimeout(this._scan, 60); }
+  }
+  componentWillUnmount() { window.removeEventListener('scroll', this._scan); window.removeEventListener('resize', this._scan); window.removeEventListener('keydown', this._key); clearTimeout(this._t); }
+
+  animateCounts() {
+    this._counted = true;
+    const dur = 1500, t0 = performance.now(), fmt = this.fmt, S = this.stats;
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      S.forEach((s, i) => { const el = document.getElementById('mkt-stat-' + i); if (el) el.textContent = (s.prefix || '') + fmt(Math.round(s.num * e)) + (s.suffix || ''); });
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  goTo(page) { this.setState({ page, menuOpen: false, industryOpen: false }); }
+  openDetail(slug) { this.setState({ page: 'detail', detailSlug: slug, menuOpen: false }); }
+  openForm() {
+    if (this.state.page !== 'home') this.setState({ page: 'home', menuOpen: false });
+    setTimeout(() => { const el = document.getElementById('mkt-lead'); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' }); }, this.state.page !== 'home' ? 120 : 0);
+  }
+  showToast(msg) { clearTimeout(this._t); this.setState({ toast: msg }); this._t = setTimeout(() => this.setState({ toast: null }), 2600); }
+  share(c) {
+    const url = (typeof location !== 'undefined' ? location.href : '') + '#/cau-chuyen/' + c.slug;
+    if (navigator.clipboard) navigator.clipboard.writeText(url).catch(() => {});
+    this.showToast('Đã sao chép liên kết!');
+  }
+
+  chip(label, active, onClick) {
+    return { label, active, onClick,
+      bg: active ? 'var(--grad-hero)' : '#fff',
+      color: active ? '#fff' : 'var(--ink-soft)',
+      border: active ? '1px solid transparent' : '1px solid var(--line)',
+      shadow: active ? 'var(--sh-md)' : 'none' };
+  }
+  deco = (c) => ({ ...c, bigValue: c.metrics[0].value, coverBg: this.covers[this.cases.indexOf(c) % this.covers.length],
+    onOpen: () => this.openDetail(c.slug), onShare: () => this.share(c) });
+
+  submitForm = (e) => {
+    e.preventDefault();
+    const f = this.state.form, err = {};
+    if (!f.name.trim()) err.name = 'Vui lòng nhập họ tên của bạn';
+    if (!/^[0-9][0-9\s.+()-]{7,}$/.test(f.phone.trim())) err.phone = 'Số điện thoại chưa hợp lệ';
+    if (Object.keys(err).length) { this.setState({ formErr: err }); return; }
+    this.setState({ form: { name: '', phone: '', industry: '' }, formErr: {} });
+    this.showToast('Đã gửi! Đội ngũ MKT sẽ liên hệ bạn sớm.');
+  };
+
+  renderVals() {
+    const st = this.state, S = this;
+    const navItems = [
+      { label: 'Trang chủ', page: 'home' },
+      { label: 'Câu chuyện', page: 'list' },
+      { label: 'Thư viện video', page: 'video' },
+    ];
+    const navLinks = navItems.map((n) => ({
+      label: n.label,
+      onClick: () => this.goTo(n.page),
+      color: st.page === n.page ? 'var(--orange)' : 'var(--ink-soft)',
+      bg: 'transparent',
+    }));
+
+    const all = this.cases.map(this.deco);
+    const featuredCases = all.slice(0, 3);
+    const featuredVideos = this.videos.slice(0, 3).map((v, i) => ({ ...v, coverBg: this.covers[i % this.covers.length], onPlay: () => this.setState({ videoModal: { ...v, coverBg: this.covers[i % this.covers.length] } }) }));
+
+    const filteredCases = all.filter((c) =>
+      (st.productFilter === 'Tất cả' || c.product === st.productFilter) &&
+      (st.industryFilter === 'Tất cả ngành' || c.industry === st.industryFilter));
+
+    const productChips = this.productList.map((p) => this.chip(p, p === st.productFilter, () => this.setState({ productFilter: p })));
+    const industryMenu = this.industryList.map((i) => ({
+      label: i, onClick: () => this.setState({ industryFilter: i, industryOpen: false }),
+      bg: i === st.industryFilter ? 'var(--surface)' : 'transparent',
+      color: i === st.industryFilter ? 'var(--blue-700)' : 'var(--ink-soft)',
+      weight: i === st.industryFilter ? '800' : '600',
+    }));
+
+    const dc = all.find((c) => c.slug === st.detailSlug) || all[0];
+    let related = all.filter((c) => c.slug !== dc.slug && (c.industry === dc.industry || c.product === dc.product));
+    if (related.length < 3) related = related.concat(all.filter((c) => c.slug !== dc.slug && !related.includes(c)));
+    related = related.slice(0, 3);
+
+    const vids = this.videos.map((v, i) => ({ ...v, coverBg: this.covers[i % this.covers.length], onPlay: () => this.setState({ videoModal: { ...v, coverBg: this.covers[i % this.covers.length] } }) }));
+    const filteredVideos = vids.filter((v) =>
+      (st.videoCat === 'Tất cả' || v.cat === st.videoCat) &&
+      (st.videoProduct === 'Tất cả' || v.product === st.videoProduct));
+    const catChips = this.videoCats.map((c) => this.chip(c, c === st.videoCat, () => this.setState({ videoCat: c })));
+    const vProductChips = this.videoProductList.map((p) => this.chip(p, p === st.videoProduct, () => this.setState({ videoProduct: p })));
+
+    const fe = st.formErr;
+    const errBorder = '1px solid #E5484D', okBorder = '1px solid var(--line)';
+
+    return {
+      isHome: st.page === 'home', isList: st.page === 'list', isDetail: st.page === 'detail', isVideo: st.page === 'video',
+      goHome: () => this.goTo('home'), goList: () => this.goTo('list'), goVideo: () => this.goTo('video'),
+      toggleMenu: () => this.setState((s) => ({ menuOpen: !s.menuOpen })), menuOpen: st.menuOpen,
+      navLinks, openForm: () => this.openForm(),
+
+      statCards: this.stats.map((s, i) => ({ idx: i, label: s.label, display: (s.prefix || '') + this.fmt(s.num) + (s.suffix || '') })),
+      logos: this.logos,
+      testimonials: this.testimonials.map((t) => ({ ...t, stars: Array.from({ length: t.rating }) })),
+      featuredCases, featuredVideos,
+
+      productChips, industryMenu, industryOpen: st.industryOpen,
+      industryLabel: st.industryFilter,
+      toggleIndustry: () => this.setState((s) => ({ industryOpen: !s.industryOpen })),
+      filteredCases, hasResults: filteredCases.length > 0, noResults: filteredCases.length === 0,
+      resetFilters: () => this.setState({ productFilter: 'Tất cả', industryFilter: 'Tất cả ngành' }),
+
+      detailCase: dc, relatedCases: related,
+      shareCopy: () => this.share(dc), shareZalo: () => this.share(dc), shareFb: () => this.share(dc),
+
+      catChips, vProductChips,
+      filteredVideos, hasVideos: filteredVideos.length > 0, noVideos: filteredVideos.length === 0,
+      resetVideoFilters: () => this.setState({ videoCat: 'Tất cả', videoProduct: 'Tất cả' }),
+
+      industryOptions: this.industryList.slice(1),
+      form: st.form,
+      onName: (e) => this.setState((s) => ({ form: { ...s.form, name: e.target.value }, formErr: { ...s.formErr, name: undefined } })),
+      onPhone: (e) => this.setState((s) => ({ form: { ...s.form, phone: e.target.value }, formErr: { ...s.formErr, phone: undefined } })),
+      onIndustry: (e) => this.setState((s) => ({ form: { ...s.form, industry: e.target.value } })),
+      submitForm: this.submitForm,
+      formErr: fe, nameBorder: fe.name ? errBorder : okBorder, phoneBorder: fe.phone ? errBorder : okBorder,
+
+      videoOpen: !!st.videoModal, videoModal: st.videoModal || {},
+      closeVideo: () => this.setState({ videoModal: null }), stop: (e) => e.stopPropagation(),
+
+      toastOpen: !!st.toast, toast: st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

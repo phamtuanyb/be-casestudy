@@ -1,0 +1,135 @@
+/* ===========================================================
+   MKT Showcase — brand hoá admin Payload
+   Màu thương hiệu: xanh MKT + nhấn vàng/cam. Dùng biến --theme-*
+   của Payload để tương thích cả light & dark mode.
+   =========================================================== */
+:root {
+  --mkt-blue: #1565c0;
+  --mkt-blue-dark: #0d47a1;
+  --mkt-blue-deep: #0a2e63;
+  --mkt-gold: #ffd700;
+  --mkt-orange: #ff8c00;
+}
+
+/* ---- Logo màn hình đăng nhập ---- */
+.mkt-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.mkt-logo__mark {
+  position: relative;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--mkt-blue), var(--mkt-blue-deep));
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(13, 71, 161, 0.35);
+}
+.mkt-logo__mark::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mkt-gold);
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.25);
+}
+.mkt-logo__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  font-weight: 700;
+  font-size: 20px;
+}
+.mkt-logo__text small {
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  opacity: 0.55;
+}
+
+/* ---- Icon nhỏ trên thanh nav ---- */
+.mkt-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--mkt-blue), var(--mkt-blue-deep));
+}
+
+/* ---- Dòng giới thiệu form đăng nhập ---- */
+.mkt-beforelogin {
+  text-align: center;
+  color: var(--theme-elevation-500);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+/* ---- Panel chào mừng trên dashboard ---- */
+.mkt-welcome {
+  border: 1px solid var(--theme-elevation-100);
+  background: linear-gradient(120deg, rgba(21, 101, 192, 0.07), rgba(255, 215, 0, 0.06));
+  border-radius: 14px;
+  padding: 22px 26px;
+  margin-bottom: 28px;
+}
+.mkt-welcome__title {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+.mkt-welcome__desc {
+  margin: 0 0 16px;
+  max-width: 640px;
+  color: var(--theme-elevation-600);
+}
+.mkt-welcome__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mkt-welcome__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--theme-elevation-800);
+  background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-100);
+  transition: all 0.15s ease;
+}
+.mkt-welcome__links a:hover {
+  background: var(--mkt-blue);
+  color: #fff;
+  border-color: var(--mkt-blue);
+  transform: translateY(-1px);
+}
+
+/* ---- Nhấn màu thương hiệu cho nút chính & link active ---- */
+.btn--style-primary {
+  background-color: var(--mkt-blue);
+  border-color: var(--mkt-blue);
+}
+.btn--style-primary:hover,
+.btn--style-primary:focus {
+  background-color: var(--mkt-blue-dark);
+  border-color: var(--mkt-blue-dark);
+}
+.nav__link--active {
+  color: var(--mkt-blue-dark);
+}
