@@ -52,6 +52,47 @@ export const CaseStudies: CollectionConfig = {
         { name: 'customerRole', type: 'text', label: 'Vai trò / Chức danh', admin: { width: '50%' } },
       ],
     },
+    {
+      type: 'collapsible',
+      label: 'Thông tin liên hệ khách hàng (mục 4 — chỉ hiện trên web nếu có dữ liệu)',
+      admin: { initCollapsed: true },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'customerPhone', type: 'text', label: 'Số điện thoại', admin: { width: '50%' } },
+            { name: 'customerEmail', type: 'email', label: 'Email', admin: { width: '50%' } },
+          ],
+        },
+        {
+          name: 'customerChannels',
+          type: 'array',
+          label: 'Kênh truyền thông',
+          labels: { singular: 'Kênh', plural: 'Kênh' },
+          admin: { description: 'Facebook/Zalo/TikTok/YouTube/Website... của khách hàng.' },
+          fields: [
+            {
+              name: 'platform',
+              type: 'select',
+              label: 'Nền tảng',
+              defaultValue: 'facebook',
+              options: [
+                { label: 'Facebook', value: 'facebook' },
+                { label: 'Zalo', value: 'zalo' },
+                { label: 'TikTok', value: 'tiktok' },
+                { label: 'YouTube', value: 'youtube' },
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'Website', value: 'website' },
+                { label: 'Khác', value: 'khac' },
+              ],
+              admin: { width: '34%' },
+            },
+            { name: 'label', type: 'text', label: 'Tên hiển thị', admin: { width: '33%' } },
+            { name: 'url', type: 'text', label: 'Đường dẫn (URL)', admin: { width: '33%' } },
+          ],
+        },
+      ],
+    },
     { name: 'customerAvatar', type: 'upload', label: 'Ảnh đại diện khách hàng', relationTo: 'media' },
     { name: 'coverImage', type: 'upload', label: 'Ảnh bìa', relationTo: 'media' },
     {
@@ -60,6 +101,14 @@ export const CaseStudies: CollectionConfig = {
       label: 'Màu / Gradient bìa',
       admin: {
         description: 'Màu hoặc gradient CSS, vd: linear-gradient(150deg,#0D47A1,#1565C0)',
+      },
+    },
+    {
+      name: 'youtubeId',
+      type: 'text',
+      label: 'Video YouTube (ID)',
+      admin: {
+        description: 'ID video YouTube nhúng vào trang chi tiết (vd: vWszM_AghPA). Để trống nếu không có.',
       },
     },
     {

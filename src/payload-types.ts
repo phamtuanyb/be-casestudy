@@ -237,12 +237,29 @@ export interface CaseStudy {
   } | null;
   customerName?: string | null;
   customerRole?: string | null;
+  customerPhone?: string | null;
+  customerEmail?: string | null;
+  /**
+   * Facebook/Zalo/TikTok/YouTube/Website... của khách hàng.
+   */
+  customerChannels?:
+    | {
+        platform?: ('facebook' | 'zalo' | 'tiktok' | 'youtube' | 'instagram' | 'website' | 'khac') | null;
+        label?: string | null;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   customerAvatar?: (number | null) | Media;
   coverImage?: (number | null) | Media;
   /**
    * Màu hoặc gradient CSS, vd: linear-gradient(150deg,#0D47A1,#1565C0)
    */
   coverColor?: string | null;
+  /**
+   * ID video YouTube nhúng vào trang chi tiết (vd: vWszM_AghPA). Để trống nếu không có.
+   */
+  youtubeId?: string | null;
   /**
    * Phần tử đầu (metrics[0]) là số nổi bật (bigValue).
    */
@@ -583,9 +600,20 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   result?: T;
   customerName?: T;
   customerRole?: T;
+  customerPhone?: T;
+  customerEmail?: T;
+  customerChannels?:
+    | T
+    | {
+        platform?: T;
+        label?: T;
+        url?: T;
+        id?: T;
+      };
   customerAvatar?: T;
   coverImage?: T;
   coverColor?: T;
+  youtubeId?: T;
   metrics?:
     | T
     | {

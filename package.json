@@ -13,6 +13,8 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx/esm --env-file=.env src/seed.ts",
+    "import": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx/esm --env-file=.env src/import-articles.ts",
+    "import:data": "cross-env NODE_OPTIONS=--no-deprecation node --import tsx/esm --env-file=.env src/import-from-data.ts",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"

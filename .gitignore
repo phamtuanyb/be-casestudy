@@ -56,3 +56,10 @@ node_modules/
 
 # logs tạm khi chạy dev
 *.log
+
+# Dữ liệu migrate tạm
+import-data/
+case-study-list.json
+
+# Claude Code local state
+.claude/
