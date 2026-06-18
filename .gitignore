@@ -40,10 +40,8 @@ next-env.d.ts
 
 .env
 
-/media
-
-# SQLite local DB
-*.db
+# Ảnh upload (media) và SQLite DB: ĐƯỢC commit để mang data theo khi deploy.
+# (chỉ bỏ qua các file phụ trợ tạm của SQLite)
 *.db-shm
 *.db-wal
 
